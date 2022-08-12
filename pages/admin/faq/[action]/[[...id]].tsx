@@ -1,13 +1,24 @@
-import { NextPage } from 'next'
+import { NextPage, NextPageContext } from 'next'
+import Link from 'next/link'
+
+// Data
+import { faq, FAQType } from 'data/faq'
+
+// Utils
+import { isActionValid, uppercaseFirstLetter } from 'utils/functions'
 
 // Layout
 import { Admin } from 'layouts/Admin'
 
 // Components
-import { BackButton, Description } from './commons'
-import Link from 'next/link'
+import { BackButton, Description } from 'components/commons'
 
-const Create: NextPage = () => {
+interface Props {
+  action: string
+  faq: FAQType
+}
+
+const Form: NextPage<Props> = ({ action, faq }) => {
   return (
     <Admin
       header={{
@@ -19,7 +30,7 @@ const Create: NextPage = () => {
       <div className="md:grid md:grid-cols-3 md:gap-6">
         <div className="md:col-span-1">
           <h3 className="text-lg font-medium leading-6 text-gray-900">
-            Create a new question
+            {uppercaseFirstLetter(action)} a question
           </h3>
 
           <p className="mt-1 text-sm text-gray-600">
@@ -49,6 +60,7 @@ const Create: NextPage = () => {
                     type="text"
                     placeholder="Your question title"
                     className="mt-1 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full sm:text-sm border-gray-300"
+                    value={faq.question ?? ''}
                   />
                 </div>
 
@@ -67,7 +79,7 @@ const Create: NextPage = () => {
                       rows={3}
                       className="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                       placeholder="A good answer for the question above"
-                      defaultValue={''}
+                      value={faq.answer ?? ''}
                     />
                   </div>
 
@@ -82,7 +94,7 @@ const Create: NextPage = () => {
                   type="submit"
                   className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Save
+                  {uppercaseFirstLetter(action)}
                 </button>
               </div>
             </div>
@@ -93,4 +105,37 @@ const Create: NextPage = () => {
   )
 }
 
-export default Create
+export async function getServerSideProps({ query }: NextPageContext) {
+  const action = query.action as string
+  const id = query.id as string
+
+  if (!action) {
+    return { notFound: true }
+  }
+
+  if (!isActionValid(action)) {
+    return { notFound: true }
+  }
+
+  if (action === 'create' && !id) {
+    return { props: { action, faq: {} } }
+  }
+
+  if (!id) {
+    return { notFound: true }
+  }
+
+  const isRequiredFAQ = (faq: FAQType) => {
+    return faq.id == id
+  }
+
+  const requiredFAQ = faq.data.find(isRequiredFAQ)
+
+  if (!requiredFAQ) {
+    return { notFound: true }
+  }
+
+  return { props: { action, faq: requiredFAQ } }
+}
+
+export default Form

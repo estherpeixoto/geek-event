@@ -1,15 +1,15 @@
 import { NextPage } from 'next'
 
+// Data
+import { faq } from 'data/faq'
+import { classNames } from 'utils/functions'
+
 // Layout
 import { Admin } from 'layouts/Admin'
 
 // Components
 import { Actions, actionsWidth } from 'components/Admin/Table/Actions'
-import { CreateButton, Description } from './commons'
-
-// Data
-import { faq } from 'data/faq'
-import { classNames } from 'utils/functions'
+import { CreateButton, Description } from 'components/commons'
 
 const FAQ: NextPage = () => {
   const desiredActions = ['edit', 'delete']

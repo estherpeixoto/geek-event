@@ -1,5 +1,5 @@
-import { ChevronLeftIcon, PlusIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
+import { ChevronLeftIcon, PlusIcon } from '@heroicons/react/outline'
 
 interface CommonsTypes {
   page: string
