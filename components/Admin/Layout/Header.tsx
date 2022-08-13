@@ -1,9 +1,17 @@
 import { ReactNode } from 'react'
+/* import { SearchIcon } from '@heroicons/react/outline' */
+
+type SearchBarProps = {
+  show: boolean
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
 
 export type AdminHeaderProps = {
   title?: string
   description?: ReactNode
   actions?: ReactNode
+  searchBar?: SearchBarProps
 }
 
 type HeaderProps = {
@@ -20,13 +28,28 @@ export const Header = (props: HeaderProps) => {
         </h2>
 
         {/* Descriptions */}
-        <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+        <div className="flex flex-col mt-1 sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
           {props.header.description}
         </div>
       </div>
 
       {/* Actions */}
-      <div className="mt-5 flex lg:mt-0 lg:ml-4">{props.header.actions}</div>
+      <div className="flex flex-wrap gap-2 mt-5 lg:mt-0 lg:ml-4">
+        {typeof props.header.searchBar != 'undefined' ? (
+          props.header.searchBar.show ? (
+            <input
+              id="search"
+              name="search"
+              type="text"
+              placeholder="Search..."
+              className="border-gray-300 rounded-md shadow-sm sm:max-w-xs focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              value={props.header.searchBar.value}
+              onChange={props.header.searchBar.onChange}
+            />
+          ) : null
+        ) : null}
+        {props.header.actions}
+      </div>
     </div>
   )
 }
