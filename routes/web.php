@@ -24,8 +24,38 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function() {
+    Route::get('/', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::get('calendar', function () {
+        return Inertia::render('Calendar');
+    })->name('dashboard.calendar');
+
+    Route::get('tickets', function () {
+        return Inertia::render('Tickets');
+    })->name('dashboard.tickets');
+
+    Route::get('lineup', function () {
+        return Inertia::render('Lineup');
+    })->name('dashboard.lineup');
+
+    Route::get('contests', function () {
+        return Inertia::render('Contests');
+    })->name('dashboard.contests');
+
+    Route::get('caravans', function () {
+        return Inertia::render('Caravans');
+    })->name('dashboard.caravans');
+
+    Route::get('about', function () {
+        return Inertia::render('About');
+    })->name('dashboard.about');
+
+    Route::get('faq', function () {
+        return Inertia::render('FAQ');
+    })->name('dashboard.faq');
+});
 
 require __DIR__.'/auth.php';
