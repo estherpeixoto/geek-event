@@ -11,7 +11,7 @@ import {
 // Utils
 import { classNames } from 'utils/functions'
 
-type ActionsProps = { baseUrl: string; id: string; buttons?: string[] }
+export type ActionsProps = { baseUrl: string; id: string; buttons?: string[] }
 
 const actionsWidth = { 1: 'md:w-24', 2: 'md:w-44', 3: 'md:w-72' }
 

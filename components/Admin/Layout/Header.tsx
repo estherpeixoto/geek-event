@@ -1,10 +1,9 @@
-import { ReactNode } from 'react'
+import { ReactNode, RefObject } from 'react'
+import { AgGridReact } from 'ag-grid-react'
 /* import { SearchIcon } from '@heroicons/react/outline' */
 
 type SearchBarProps = {
   show: boolean
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export type AdminHeaderProps = {
@@ -12,6 +11,7 @@ export type AdminHeaderProps = {
   description?: ReactNode
   actions?: ReactNode
   searchBar?: SearchBarProps
+  gridRef: RefObject<AgGridReact<any>>
 }
 
 type HeaderProps = {
@@ -43,8 +43,11 @@ export const Header = (props: HeaderProps) => {
               type="text"
               placeholder="Search..."
               className="border-gray-300 rounded-md shadow-sm sm:max-w-xs focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              value={props.header.searchBar.value}
-              onChange={props.header.searchBar.onChange}
+              onInput={() => {
+                props.header.gridRef.current!.api.setQuickFilter(
+                  (document.getElementById('search') as HTMLInputElement).value
+                )
+              }}
             />
           ) : null
         ) : null}
