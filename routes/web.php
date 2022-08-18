@@ -54,7 +54,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function() {
     })->name('dashboard.about');
 
     Route::get('faq', function () {
-        return Inertia::render('FAQ');
+        return Inertia::render('CRUD/FAQ');
     })->name('dashboard.faq');
 });
 
