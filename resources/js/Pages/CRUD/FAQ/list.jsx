@@ -19,24 +19,30 @@ const data = [
   { id: 10, question: 'Question 10' }
 ]
 
-const renderMenu = ({ onClose, left, top, className }, ref) => {
-  const handleSelect = eventKey => {
+const renderMenu = ({ dataKey, onClose, left, top, className }, ref) => {
+  const handleSelect = props => {
     onClose();
-    console.log(eventKey);
+    // console.log(props);
+    // window.open(`/dashboard/faq/edit/${id}`);
   };
+
+  // console.log({ dataKey, onClose, left, top, className });
+  // console.log(ref)
 
   return (
     <Popover ref={ref} className={className} style={{ left, top }} full>
       <Dropdown.Menu onSelect={handleSelect}>
-        <Dropdown.Item eventKey={1}>Unpublish</Dropdown.Item>
-        <Dropdown.Item eventKey={2}>Edit</Dropdown.Item>
-        <Dropdown.Item eventKey={3}>Delete</Dropdown.Item>
+        <Dropdown.Item faqid={dataKey} eventKey={1}>Unpublish</Dropdown.Item>
+        <Dropdown.Item faqid={dataKey} eventKey={2}>Edit</Dropdown.Item>
+        <Dropdown.Item faqid={dataKey} eventKey={3}>Delete</Dropdown.Item>
       </Dropdown.Menu>
     </Popover>
   );
 };
 
 const ActionCell = ({ rowData, dataKey, ...props }) => {
+  console.log({ rowData, dataKey, ...props })
+
   return (
     <Cell {...props} className="link-group">
       <Whisper placement="autoVerticalStart" trigger="click" speaker={renderMenu}>
@@ -66,9 +72,7 @@ export default function FAQ(props) {
               rowHeight={60}
               height={400}
               data={data}
-              onRowClick={rowData => {
-                console.log(rowData);
-              }}
+            // onRowClick={rowData => console.log(rowData)}
             >
               <Column width={60} align="center" verticalAlign="middle" fixed>
                 <HeaderCell>Id</HeaderCell>
@@ -81,9 +85,7 @@ export default function FAQ(props) {
               </Column>
 
               <Column width={80} verticalAlign="middle" fixed="right">
-                <HeaderCell>
-                  <MoreIcon />
-                </HeaderCell>
+                <HeaderCell>Options</HeaderCell>
                 <ActionCell dataKey="id" />
               </Column>
             </Table>

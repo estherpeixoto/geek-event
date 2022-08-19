@@ -24,7 +24,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function() {
+Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
@@ -53,9 +53,17 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function() {
         return Inertia::render('About');
     })->name('dashboard.about');
 
-    Route::get('faq', function () {
-        return Inertia::render('CRUD/FAQ');
-    })->name('dashboard.faq');
+    Route::prefix('faq')->group(function () {
+        Route::get('/', function () {
+            return Inertia::render('CRUD/FAQ/list');
+        })->name('dashboard.faq');
+
+        Route::get('edit/{id}', function ($id) {
+            return Inertia::render('CRUD/FAQ/edit', [
+                'id' => $id
+            ]);
+        })->name('dashboard.faq.edit');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
