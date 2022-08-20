@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Faq;
 use Illuminate\Http\Request;
 
 class FaqController extends Controller
@@ -14,7 +15,7 @@ class FaqController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Faq::all());
     }
 
     /**
@@ -25,7 +26,12 @@ class FaqController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return response()->json(
+            Faq::create([
+                'question' => $request->question,
+                'answer' => $request->answer
+            ])
+        );
     }
 
     /**
@@ -36,7 +42,7 @@ class FaqController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json(Faq::findOrFail($id));
     }
 
     /**
@@ -48,7 +54,25 @@ class FaqController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $faq = Faq::findOrFail($id);
+
+        if ($request->question) {
+            $faq->question = $request->question;
+        }
+
+        if ($request->answer) {
+            $faq->answer = $request->answer;
+        }
+
+        if ($faq->isDirty()) {
+            if ($faq->save()) {
+                return response()->json(['message' => 'Update successfully']);
+            }
+
+            return response()->json(['message' => 'Fail to update'], 500);
+        }
+
+        return response()->json(['message' => 'Nothing to update']);
     }
 
     /**
@@ -59,6 +83,10 @@ class FaqController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Faq::destroy($id)) {
+            return response()->json(['message' => 'Destroyed successfully']);
+        }
+
+        return response()->json(['message' => 'Fail to destroy']);
     }
 }
