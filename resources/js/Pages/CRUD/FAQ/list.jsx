@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Head, Link } from '@inertiajs/inertia-react'
-import { PencilAltIcon, PlusIcon, TrashIcon } from '@heroicons/react/outline'
+import axios from 'axios'
+import {
+  PencilAltIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/outline'
 import Authenticated from '@/Layouts/Authenticated'
 import Modal from '@/Components/Forms/Modal'
-import axios from 'axios'
 
-const closedModalState = {
+const closedDialogState = {
   isOpen: false,
   title: '',
   action: { method: '', route: '' },
@@ -15,7 +19,7 @@ export default function FAQ(props) {
   const [list, setList] = useState([])
 
   // Base modal for alerts and form
-  let [modal, setModal] = useState(closedModalState)
+  let [modal, setModal] = useState(closedDialogState)
 
   // Form inputs
   let [id, setId] = useState('')
@@ -28,7 +32,7 @@ export default function FAQ(props) {
   }, [])
 
   function closeModal() {
-    setModal(closedModalState)
+    setModal(closedDialogState)
     setId('')
     setQuestion('')
     setAnswer('')
@@ -91,7 +95,7 @@ export default function FAQ(props) {
   }
 
   async function handleDelete(faqId) {
-    if (confirm('Confirm delete?')) {
+    if (confirm('Are you sure you want to delete this question?')) {
       const response = await axios.delete(route('faq.destroy', { faq: faqId }))
 
       if (response.status === 200) {
@@ -136,9 +140,9 @@ export default function FAQ(props) {
               return (
                 <div
                   key={faq.id}
-                  className='overflow-hidden bg-white shadow-sm sm:rounded-lg'
+                  className='flex flex-col overflow-hidden bg-white shadow-sm sm:rounded-lg'
                 >
-                  <div className='p-4'>
+                  <div className='flex-1 p-4'>
                     <p className='font-medium text-gray-500'>Question:</p>
 
                     <p className='mt-1 text-gray-900'>{faq.question}</p>
