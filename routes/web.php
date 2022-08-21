@@ -64,6 +64,12 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
             ]);
         })->name('dashboard.faq.edit');
     });
+
+    Route::prefix('documentation')->group(function () {
+        Route::get('/', function () {
+            return Inertia::render('Documentation/index');
+        })->name('dashboard.documentation');
+    });
 });
 
 require __DIR__ . '/auth.php';
