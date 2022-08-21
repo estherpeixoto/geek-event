@@ -66,7 +66,10 @@ class FaqController extends Controller
 
         if ($faq->isDirty()) {
             if ($faq->save()) {
-                return response()->json(['message' => 'Update successfully']);
+                return response()->json([
+                    'message' => 'Update successfully',
+                    'faq' => $faq
+                ]);
             }
 
             return response()->json(['message' => 'Fail to update'], 500);
