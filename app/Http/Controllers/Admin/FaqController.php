@@ -26,12 +26,19 @@ class FaqController extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json(
-            Faq::create([
-                'question' => $request->question,
-                'answer' => $request->answer
-            ])
-        );
+        $createdFaq = Faq::create([
+            'question' => $request->question,
+            'answer' => $request->answer
+        ]);
+
+        if ($createdFaq) {
+            return response()->json([
+                'message' => 'Created successfully',
+                'faq' => $createdFaq
+            ]);
+        }
+
+        return response()->json(['message' => 'Fail to create'], 500);
     }
 
     /**

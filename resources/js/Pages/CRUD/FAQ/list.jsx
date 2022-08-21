@@ -3,12 +3,19 @@ import { Head, Link } from '@inertiajs/inertia-react'
 import { PencilAltIcon, PlusIcon, TrashIcon } from '@heroicons/react/outline'
 import Authenticated from '@/Layouts/Authenticated'
 import Modal from '@/Components/Forms/Modal'
+import axios from 'axios'
+
+const closedModalState = {
+  isOpen: false,
+  title: '',
+  action: { method: '', route: '' },
+}
 
 export default function FAQ(props) {
   const [list, setList] = useState([])
 
   // Base modal for alerts and form
-  let [isModalOpen, setIsModalOpen] = useState(false)
+  let [modal, setModal] = useState(closedModalState)
 
   // Form inputs
   let [id, setId] = useState('')
@@ -21,11 +28,21 @@ export default function FAQ(props) {
   }, [])
 
   function closeModal() {
-    setIsModalOpen(false)
+    setModal(closedModalState)
+    setId('')
+    setQuestion('')
+    setAnswer('')
   }
 
   function handleCreate() {
-    setIsModalOpen(true)
+    setModal({
+      isOpen: true,
+      title: 'Create question',
+      action: {
+        method: 'post',
+        route: route('faq.store'),
+      },
+    })
   }
 
   function handleEdit(faqId) {
@@ -39,7 +56,38 @@ export default function FAQ(props) {
     setQuestion(faq.question)
     setAnswer(faq.answer)
 
-    setIsModalOpen(true)
+    setModal({
+      isOpen: true,
+      title: 'Edit question',
+      action: {
+        method: 'put',
+        route: route('faq.update', { faq: faqId }),
+      },
+    })
+  }
+
+  async function handleSave() {
+    const response = await axios[modal.action.method](modal.action.route, {
+      question,
+      answer,
+    })
+
+    alert(response.data.message)
+
+    if (response.data.faq) {
+      if (modal.action.method === 'post') {
+        list.push(response.data.faq)
+      } else if (modal.action.method === 'put') {
+        list.find((item, key) => {
+          if (item.id == id) {
+            list[key] = response.data.faq
+          }
+        })
+      }
+
+      closeModal()
+      return
+    }
   }
 
   async function handleDelete(faqId) {
@@ -56,26 +104,6 @@ export default function FAQ(props) {
 
       alert(response.data.message ?? 'Fail to delete')
     }
-  }
-
-  async function handleSave() {
-    const response = await axios.put(route('faq.update', { faq: id }), {
-      question,
-      answer,
-    })
-
-    if (response.data.faq) {
-      list.find((item, key) => {
-        if (item.id == id) {
-          list[key] = response.data.faq
-        }
-      })
-
-      closeModal()
-      return
-    }
-
-    alert('Fail to update')
   }
 
   return (
@@ -145,9 +173,9 @@ export default function FAQ(props) {
       </div>
 
       <Modal
-        isOpen={isModalOpen}
+        isOpen={modal.isOpen}
         close={closeModal}
-        title='Edit question'
+        title={modal.title}
       >
         <div className='mt-2'>
           <p className='px-6 pb-6 text-sm text-gray-500'>
