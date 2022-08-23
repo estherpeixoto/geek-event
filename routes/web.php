@@ -55,11 +55,11 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 
     Route::prefix('faq')->group(function () {
         Route::get('/', function () {
-            return Inertia::render('CRUD/FAQ/list');
+            return Inertia::render('Admin/FAQ/list');
         })->name('dashboard.faq');
 
         Route::get('edit/{id}', function ($id) {
-            return Inertia::render('CRUD/FAQ/edit', [
+            return Inertia::render('Admin/FAQ/edit', [
                 'id' => $id
             ]);
         })->name('dashboard.faq.edit');
