@@ -67,7 +67,9 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 
     Route::prefix('documentation')->group(function () {
         Route::get('/', function () {
-            return Inertia::render('Documentation/index');
+            return Inertia::render('Documentation/index', [
+                'markdown' => file_get_contents(resource_path('/docs/getting-started.md'))
+            ]);
         })->name('dashboard.documentation');
     });
 });

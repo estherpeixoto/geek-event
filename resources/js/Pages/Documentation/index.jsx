@@ -2,6 +2,7 @@ import React from 'react'
 import { Head } from '@inertiajs/inertia-react'
 import Authenticated from '@/Layouts/Authenticated'
 import Layout from './Layout'
+import Docs from '@/Components/Docs'
 
 export default function Documentation(props) {
   return (
@@ -16,8 +17,8 @@ export default function Documentation(props) {
     >
       <Head title='Documentation' />
 
-      <Layout title='Getting started'>
-        <p className='mt-4'>These are for developers 😉</p>
+      <Layout>
+        <Docs markdown={props.markdown} />
       </Layout>
     </Authenticated>
   )
