@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DocsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -65,13 +66,8 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
         })->name('dashboard.faq.edit');
     });
 
-    Route::prefix('documentation')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('Documentation/index', [
-                'markdown' => file_get_contents(resource_path('/docs/getting-started.md'))
-            ]);
-        })->name('dashboard.documentation');
-    });
+    Route::get('documentation/{page}', [DocsController::class, 'index'])
+        ->name('dashboard.documentation');
 });
 
 require __DIR__ . '/auth.php';

@@ -69,7 +69,9 @@ export default function Authenticated({ auth, header, children }) {
 
                   <Dropdown.Content>
                     <Dropdown.Link
-                      href={route('dashboard.documentation')}
+                      href={route('dashboard.documentation', {
+                        page: 'introduction',
+                      })}
                       method='get'
                       as='button'
                     >
@@ -158,7 +160,9 @@ export default function Authenticated({ auth, header, children }) {
 
             <div className='mt-3 space-y-1'>
               <ResponsiveNavLink
-                href={route('dashboard.documentation')}
+                href={route('dashboard.documentation', {
+                  page: 'introduction',
+                })}
                 method='get'
                 as='button'
               >
