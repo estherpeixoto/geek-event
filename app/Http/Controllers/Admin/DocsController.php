@@ -21,7 +21,7 @@ class DocsController extends Controller
             );
         }
 
-        return Inertia::render('Documentation/index', [
+        return Inertia::render('Admin/Documentation', [
             'markdown' => file_get_contents($path)
         ]);
     }
