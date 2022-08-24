@@ -51,20 +51,12 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
     })->name('dashboard.caravans');
 
     Route::get('about', function () {
-        return Inertia::render('About');
+        return Inertia::render('Admin/About/index');
     })->name('dashboard.about');
 
-    Route::prefix('faq')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('Admin/FAQ/list');
-        })->name('dashboard.faq');
-
-        Route::get('edit/{id}', function ($id) {
-            return Inertia::render('Admin/FAQ/edit', [
-                'id' => $id
-            ]);
-        })->name('dashboard.faq.edit');
-    });
+    Route::get('faq', function () {
+        return Inertia::render('Admin/FAQ/list');
+    })->name('dashboard.faq');
 
     Route::get('documentation/{page}', [DocsController::class, 'index'])
         ->name('dashboard.documentation');
