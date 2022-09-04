@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\FaqController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('faq', FaqController::class);
+
+Route::prefix('about')->group(function () {
+    Route::get('/', [AboutController::class, 'index'])
+        ->name('about.index');
+
+    Route::post('/{id}', [AboutController::class, 'update'])
+        ->name('about.update');
+});
